@@ -8,7 +8,7 @@ window.fullscreen = True
 window.color = color.white
 
 
-dino = Animation("assets/dino", collider="box", x=-5)
+dino = Animation("assets/shad", collider="box", x=-5)
 
 ground1 = Entity(model="quad", texture="assets/ground", scale=(50, 0.25, 1), z=1, y=-0.5)
 ground2 = duplicate(ground1, x=50)
@@ -23,7 +23,7 @@ gordos = [gordo1, gordo2, gordo3, gordo4]
 
 
 def newGordo():
-    if gordos[0].X < 0:
+    if gordos[0].X < -10:
         last = gordos.pop(0)
         last.x_setter(r.randint(20, 30))
         gordos.append(last)
@@ -50,14 +50,15 @@ def update():
         c.x -= 6 * time.dt
     if dino.intersects().hit:
         dino.texture = "assets/hit"
-        application.pause()
+        points = 0
+
 
 
 # sound = Audio("assets/beep", autoplay=False)
 
 
 def input(key):
-    if key == "space":
+    if key in ("space", "j"):
         if dino.y < 0.01:
             # sound.play()
             dino.animate_y(2, duration=0.4, curve=curve.out_sine)
