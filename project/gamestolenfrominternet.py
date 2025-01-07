@@ -50,11 +50,10 @@ def update():
         c.x -= 6 * time.dt
     if dino.intersects().hit:
         dino.texture = "assets/hit"
+        application.pause()
         points = 0
 
 
-
-# sound = Audio("assets/beep", autoplay=False)
 
 
 def input(key):
