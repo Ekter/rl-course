@@ -8,7 +8,8 @@ app = Ursina()
 window.fullscreen = True
 window.color = color.white
 
-dino = Animation("assets/dino", x=-5)
+dino = Animation("assets/shad", x=-5)
+
 
 head_collider = Entity(
     model='sphere',
@@ -46,7 +47,7 @@ collider_visual = Entity(
 
 
 def newGordo():
-    if gordos[0].X < 0:
+    if gordos[0].X < -10:
         last = gordos.pop(0)
         last.x_setter(r.randint(20, 30))
         gordos.append(last)
@@ -76,13 +77,13 @@ def update():
     if dino.intersects().hit:
         dino.texture = "assets/hit"
         application.pause()
+        points = 0
 
 
-# sound = Audio("assets/beep", autoplay=False)
 
 
 def input(key):
-    if key == "space":
+    if key in ("space", "j"):
         if dino.y < 0.01:
             # sound.play()
             dino.animate_y(2, duration=0.4, curve=curve.out_sine)
