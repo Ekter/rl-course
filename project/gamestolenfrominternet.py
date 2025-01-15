@@ -99,8 +99,12 @@ class ShadowGame():
         else:
             quit()
 
-# def view():
-    
+    def view(self):
+        closest = min(self.gordos + self.cadoizos, key=lambda x: x.x)
+        x = closest.x
+        y_up = closest.y
+        y_down = closest.y + closest.scale_y
+        return x, y_up, y_down
 
 Shadgame = ShadowGame()
 window.fullscreen = True
