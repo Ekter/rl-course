@@ -14,8 +14,14 @@ class ShadowGame():
         self.gordos = []
         self.cadoizos = []
         self.setup_game()
+        self.gravity = -9.8
+        self.velocity = 0
+        self.jump_speed = 5
+        self.jumping = True
 
     def setup_game(self) :
+        self.velocity = 0
+        self.jumping = False
         destroy(self.dino, delay=0)
         destroy(self.label, delay=0)
         for gordo in self.gordos:
@@ -32,18 +38,18 @@ class ShadowGame():
             position=(0, 0, 0),
             enabled=False  # Actif par défaut
         )
-        self.ground1 = Entity(model="quad", texture="assets/ground", scale=(50, 0.25, 1), z=1, y=-0.5)
+        self.ground1 = Entity(model="quad", texture="assets/ground", scale=(50, 0.25, 1), z=1, y=-0.3)
         self.ground2 = duplicate(self.ground1, x=50)
         self.pair = [self.ground1, self.ground2]
 
-        self.cadoizo = Entity(model="quad",texture = "assets/cadoizo2", x = 200, y = 0.1, collider = "sphere")
-        self.cadoizo2 = Entity(model="quad",texture = "assets/cadoizo2", x = 10, y = 1,collider = "sphere", scale = (0.6,0.6,0))
+        self.cadoizo = Entity(model="quad",texture = "assets/cadoizo2", x = 200, y = 0.4, collider = "sphere", scale=(0.6,0.6,0))
+        self.cadoizo2 = Entity(model="quad",texture = "assets/cadoizo2", x = 10, y = 1.1,collider = "sphere", scale = (0.6,0.6,0))
         self.cadoizos = [self.cadoizo,self.cadoizo2]
 
-        self.gordo1 = Animation(name="assets/gordo", x=10, collider="box")
-        self.gordo2 = Animation(name="assets/gordo", x=14, collider="box")
-        self.gordo3 = Animation(name="assets/gordo", x=20, collider="box")
-        self.gordo4 = Animation(name="assets/gordo", x=26, collider="box")
+        self.gordo1 = Animation(name="assets/gordo", x=10,y=0.3, collider="box")
+        self.gordo2 = Animation(name="assets/gordo", x=14,y=0.3, collider="box")
+        self.gordo3 = Animation(name="assets/gordo", x=20,y=0.3, collider="box")
+        self.gordo4 = Animation(name="assets/gordo", x=26,y=0.3, collider="box")
         self.gordos = [self.gordo1, self.gordo2, self.gordo3, self.gordo4]
 
         self.label = Text(text=f"Points: {0}", color=color.black, position=(-0.5, 0.4))
@@ -56,6 +62,12 @@ class ShadowGame():
             self.ground.x -= 6 * time.dt
             if self.ground.x < -35:
                 self.ground.x += 100
+        if self.jumping :
+            self.dino.y +=self.velocity*time.dt
+            self.velocity += self.gravity*time.dt
+            if self.dino.y <= 0:
+                self.dino.y =0
+                self.jumping = False
         for c in self.gordos:
             c.x -= 6 * time.dt
             if c.x<-10:
@@ -79,7 +91,13 @@ class ShadowGame():
         print(key)
         if key.split(" ")[0] in ("space", "j","up"):
             # if dino.y < 0.01:
-                self.dino.y +=0.5
+            # if not self.jumping:
+                self.jumping = True
+                self.velocity = self.jump_speed
+        elif key.split(" ")[0] in ("down"):
+            if self.jumping:
+                self.velocity -= 37
+                # self.dino.y -= 0.1
         else:
             quit()
 
