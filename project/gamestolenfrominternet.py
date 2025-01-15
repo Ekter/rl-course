@@ -37,13 +37,6 @@ gordo3 = Animation(name="assets/gordo", x=20, collider="box")
 gordo4 = Animation(name="assets/gordo", x=26, collider="box")
 gordos = [gordo1, gordo2, gordo3, gordo4]
 
-collider_visual = Entity(
-    model='wireframe_quad',  # Modèle filaire pour visualiser
-      # Correspond à la taille du collider
-    position=dino.position,  # Même position que l'entité
-    color=color.red,  # Rouge pour bien le distinguer
-    parent=dino # Parenté avec l'entité principale pour qu'il bouge avec
-)
 
 
 def newGordo():
