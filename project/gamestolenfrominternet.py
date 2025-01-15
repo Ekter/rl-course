@@ -48,17 +48,6 @@ gordos = [gordo1, gordo2, gordo3, gordo4]
 
 
 
-def newGordo():
-    if gordos[0].X < -10:
-        last = gordos.pop(0)
-        last.x_setter(r.randint(20, 30))
-        gordos.append(last)
-
-    invoke(newGordo, delay=2)
-
-
-newGordo()
-
 
 label = Text(text=f"Points: {0}", color=color.black, position=(-0.5, 0.4))
 points = 0
@@ -74,23 +63,35 @@ def update():
             ground.x += 100
     for c in gordos:
         c.x -= 6 * time.dt
+        if c.x<-10:
+            c.x = r.randint(20,30)
     for d in cadoizos:
         d.x -=6 *time.dt
     if head_collider.intersects().hit:
-        dino.texture = "assets/hit"
-        application.pause()
+        dino.texture = "assets/ohno"
+        application.quit()
         points = 0
 
 
 
 
 def input(key):
-    if key in ("space", "j","up"):
+    # if key in ("space", "j","up"):
         # if dino.y < 0.01:
             # sound.play()
             # dino.animate_y(2, duration=0.4, curve=curve.out_sine)
             # dino.animate_y(0, duration=0.4, delay=0.4, curve=curve.in_sine)
+            
+    print(key)
+    if key.split(" ")[0] in ("space", "j","up"):
+        # if dino.y < 0.01:
             dino.y +=0.5
+    else:
+        application.quit()
+
+def view():
+    
+
 
 
 camera.orthographic = True

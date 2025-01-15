@@ -3,7 +3,7 @@
 
 import numpy as np
 
-import copy
+# import copy
 
 class TicTacModel:
     def __init__(self):
@@ -72,5 +72,14 @@ class TicTacModel:
             self.board[x, y] = 0
             self.player = -self.player
             self.turns-=1
-        # return sum(res)/len(res)
-        return max(res)
+        return sum(res)/len(res)
+        # return max(res)
+
+
+
+class Policy_Test:
+    def __init__(self):
+        self.game = TicTacModel()
+
+    def hint(self):
+        pass
