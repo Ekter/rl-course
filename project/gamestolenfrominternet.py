@@ -15,18 +15,27 @@ head_collider = Entity(
     model='sphere',
     collider='sphere',
     parent=dino,
-    scale=(1, 1, 1),  # Taille pour la tête
+    scale=(0.9, 0.9, 0.9),  # Taille pour la tête
     position=(0, 0, 0),
-    enabled=True  # Actif par défaut
+    enabled=False  # Actif par défaut
 )
 
 ground1 = Entity(model="quad", texture="assets/ground", scale=(50, 0.25, 1), z=1, y=-0.5)
 ground2 = duplicate(ground1, x=50)
 pair = [ground1, ground2]
 
-cadoizo = Entity(model="quad",texture = "assets/cadoizo", x = 200, y = 0.1, collider = "box")
-cadoizo2 = Entity(model="quad",texture = "assets/cadoizo", x = 10, y = 1, collider = "box")
+cadoizo = Entity(model="quad",texture = "assets/cadoizo2", x = 200, y = 0.1, collider = "sphere")
+cadoizo2 = Entity(model="quad",texture = "assets/cadoizo2", x = 10, y = 1,collider = "sphere", scale = (0.6,0.6,0))
 cadoizos = [cadoizo,cadoizo2]
+
+# collider_cad = Entity(
+#     model = 'sphere',
+#     collider='sphere',
+#     parent=cadoizo2,
+#     scale = (1,1,1),
+#     position=(0,0,0),
+#     enabled=True
+# )
 
 
 
@@ -67,7 +76,7 @@ def update():
         c.x -= 6 * time.dt
     for d in cadoizos:
         d.x -=6 *time.dt
-    if dino.intersects().hit:
+    if head_collider.intersects().hit:
         dino.texture = "assets/hit"
         application.pause()
         points = 0
@@ -76,11 +85,12 @@ def update():
 
 
 def input(key):
-    if key in ("space", "j"):
-        if dino.y < 0.01:
+    if key in ("space", "j","up"):
+        # if dino.y < 0.01:
             # sound.play()
-            dino.animate_y(2, duration=0.4, curve=curve.out_sine)
-            dino.animate_y(0, duration=0.4, delay=0.4, curve=curve.in_sine)
+            # dino.animate_y(2, duration=0.4, curve=curve.out_sine)
+            # dino.animate_y(0, duration=0.4, delay=0.4, curve=curve.in_sine)
+            dino.y +=0.5
 
 
 camera.orthographic = True
