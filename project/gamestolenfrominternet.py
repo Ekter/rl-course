@@ -1,7 +1,7 @@
 # https://github.com/ZippyCodeYT/Zippy_Codes/tree/main
 
 from ursina import *
-import random as r
+import random as random
 
 # app = Ursina()
 
@@ -59,9 +59,11 @@ class ShadowGame():
         for c in self.gordos:
             c.x -= 6 * time.dt
             if c.x<-10:
-                c.x = r.randint(20,30)
+                c.x = random.randint(20,30)
         for d in self.cadoizos:
             d.x -=6 *time.dt
+            if d.x<-10:
+                d.x = random.randint(20,30)
         if self.head_collider.intersects().hit:
             self.dino.texture = "assets/ohno"
             self.setup_game()
@@ -87,6 +89,7 @@ class ShadowGame():
         y_up = closest.y
         y_down = closest.y + closest.scale_y
         return x, y_up, y_down
+
 
 Shadgame = ShadowGame()
 window.fullscreen = True
