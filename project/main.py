@@ -16,16 +16,19 @@ device = (
 print(f"Using {device} device")
 print("\n\n\n\n\n\n\nfeur")
 
+Shadgame = ShadowGame()
+input = Shadgame.input
+update = Shadgame.update
 
 def game():
-    Shadgame = ShadowGame()
     window.fullscreen = True
     window.color = color.white
     camera.orthographic = True
     camera.fov = 10
-    update = Shadgame.update
-    input = Shadgame.input
     Shadgame.app.run()
+
+
+game()
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
@@ -46,3 +49,4 @@ class NeuralNetwork(nn.Module):
 
 model = NeuralNetwork().to(device)
 print(model)
+
