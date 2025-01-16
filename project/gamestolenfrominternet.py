@@ -42,7 +42,7 @@ class ShadowGame():
         self.ground2 = duplicate(self.ground1, x=50)
         self.pair = [self.ground1, self.ground2]
 
-        self.cadoizo = Entity(model="quad",texture = "assets/cadoizo2", x = 200, y = 0.4, collider = "sphere", scale=(0.6,0.6,0))
+        self.cadoizo = Entity(model="quad",texture = "assets/cadoizo2", x = 2, y = 0.5, collider = "sphere", scale=(0.6,0.6,0))
         self.cadoizo2 = Entity(model="quad",texture = "assets/cadoizo2", x = 10, y = 1.1,collider = "sphere", scale = (0.6,0.6,0))
         self.cadoizos = [self.cadoizo,self.cadoizo2]
 
@@ -130,6 +130,12 @@ class ShadowGame():
             if self.jumping:
                 self.velocity -= 13
                 # self.dino.y -= 0.1
+            elif self.dino.y == 0 and key != "down arrow up":
+                self.crouching = True
+                self.dino.y = -0.1
+            elif key == "down arrow up":
+                self.dino.y = 0
+            
         else:
             quit()
 
