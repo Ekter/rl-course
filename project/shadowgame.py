@@ -1,5 +1,3 @@
-# https://github.com/ZippyCodeYT/Zippy_Codes/tree/main
-
 from ursina import *
 import random as random
 
@@ -146,13 +144,12 @@ class ShadowGame():
         y_down = closest.y + closest.scale_y
         return x, y_up, y_down
 
-
-Shadgame = ShadowGame()
-window.fullscreen = True
-window.color = color.white
-camera.orthographic = True
-camera.fov = 10
-update = Shadgame.update
-input = Shadgame.input
-Shadgame.app.run()
-print("37")
+if __name__ == "__main__":
+    Shadgame = ShadowGame()
+    window.fullscreen = True
+    window.color = color.white
+    camera.orthographic = True
+    camera.fov = 10
+    update = Shadgame.update
+    input = Shadgame.input
+    Shadgame.app.run()
