@@ -35,7 +35,7 @@ class ShadowGame:
             parent=self.dino,
             scale=(0.9, 0.9, 0.9),  # Taille pour la tête
             position=(0, 0, 0),
-            enabled=True,  # Actif par défaut
+            enabled=False,  # Actif par défaut
         )
         self.ground1 = Entity(
             model="quad", texture="assets/ground", scale=(50, 0.25, 1), z=1, y=-0.3
@@ -75,7 +75,7 @@ class ShadowGame:
             parent=self.gordo1,
             scale=(0.7, 0.7, 0.7),
             position=(0, 0, 0),
-            enabled=True,
+            enabled=False,
         )
         self.gordocollider2 = Entity(
             model="sphere",
@@ -83,7 +83,7 @@ class ShadowGame:
             parent=self.gordo2,
             scale=(0.7, 0.7, 0.7),
             position=(0, 0, 0),
-            enabled=True,
+            enabled=False,
         )
         self.gordocollider3 = Entity(
             model="sphere",
@@ -91,7 +91,7 @@ class ShadowGame:
             parent=self.gordo3,
             scale=(0.7, 0.7, 0.7),
             position=(0, 0, 0),
-            enabled=True,
+            enabled=False,
         )
         self.gordocollider4 = Entity(
             model="sphere",
@@ -99,7 +99,7 @@ class ShadowGame:
             parent=self.gordo4,
             scale=(0.7, 0.7, 0.7),
             position=(0, 0, 0),
-            enabled=True,
+            enabled=False,
         )
         self.label = Text(text=f"Points: {0}", color=color.black, position=(-0.5, 0.4))
         self.points = 0
@@ -143,7 +143,7 @@ class ShadowGame:
             if not self.jumping:
                 self.jumping = True
                 self.velocity = self.jump_speed
-        elif key.split(" ")[0] in ("down"):
+        elif key.split(" ")[0] in ("down", "s"):
             if self.jumping:
                 self.velocity -= 13
                 # self.dino.y -= 0.1
@@ -154,6 +154,32 @@ class ShadowGame:
                 self.dino.y = 0
         else:
             quit()
+
+    def inputv2(self, key):
+        # if key in ("space", "j","up"):
+        # if dino.y < 0.01:
+        # sound.play()
+        # dino.animate_y(2, duration=0.4, curve=curve.out_sine)
+        # dino.animate_y(0, duration=0.4, delay=0.4, curve=curve.in_sine)
+
+        print(key)
+        if key.split(" ")[0] in ("space", "j", "up"):
+            # if dino.y < 0.01:
+            if not self.jumping:
+                self.jumping = True
+                self.velocity = self.jump_speed
+        elif key.split(" ")[0] in ("down", "s"):
+            if self.jumping:
+                self.velocity -= 13
+                # self.dino.y -= 0.1
+            elif self.dino.y == 0 and key != "down arrow up":
+                self.crouching = True
+                self.dino.y = -0.1
+            elif key == "down arrow up":
+                self.dino.y = 0
+        else:
+            quit()
+
 
     def view(self):
         closest = min(self.gordos + self.cadoizos, key=lambda x: x.x)
