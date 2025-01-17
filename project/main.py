@@ -15,19 +15,6 @@ device = (
 print(f"Using {device} device")
 print("\n\n\n\n\n\n\nfeur")
 
-Shadgame = ShadowGame()
-input = Shadgame.input
-update = Shadgame.update
-
-def game():
-    window.fullscreen = True
-    window.color = color.white
-    camera.orthographic = True
-    camera.fov = 10
-    Shadgame.app.run()
-
-
-# game()
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
@@ -83,5 +70,15 @@ scores.sort(key=lambda x: x[0])
 
 new_models = []
 
-for score, model in scores:
-    
+for score, model in scores:# improve model
+    pass
+
+def launch_game():
+    with open("action.txt","w",encoding="utf-8") as file:
+        file.write("f")
+    subprocess.Popen(["python","shadowgame.py"])
+    print("mpolujyhtfredzs")
+
+
+if __name__ == "__main__":
+    launch_game()
