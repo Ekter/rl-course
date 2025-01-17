@@ -16,19 +16,7 @@ device = (
 print(f"Using {device} device")
 print("\n\n\n\n\n\n\nfeur")
 
-Shadgame = ShadowGame()
-input = Shadgame.input
-update = Shadgame.update
 
-def game():
-    window.fullscreen = True
-    window.color = color.white
-    camera.orthographic = True
-    camera.fov = 10
-    Shadgame.app.run()
-
-
-game()
 
 class NeuralNetwork(nn.Module):
     def __init__(self):
@@ -50,3 +38,12 @@ class NeuralNetwork(nn.Module):
 model = NeuralNetwork().to(device)
 print(model)
 
+def launch_game():
+    with open("action.txt","w",encoding="utf-8") as file:
+        file.write("f")
+    subprocess.Popen(["python","shadowgame.py"])
+    print("mpolujyhtfredzs")
+
+
+if __name__ == "__main__":
+    launch_game()

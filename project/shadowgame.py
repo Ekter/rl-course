@@ -8,7 +8,7 @@ class ShadowGame:
     def __init__(self):
         super().__init__()
         self.app = Ursina()
-        self.dino = None
+        self.shadow = None
         self.label = None
         self.gordos = []
         self.cadoizos = []
@@ -21,21 +21,22 @@ class ShadowGame:
     def setup_game(self):
         self.velocity = 0
         self.jumping = False
-        destroy(self.dino, delay=0)
+        destroy(self.shadow, delay=0)
         destroy(self.label, delay=0)
         for gordo in self.gordos:
             destroy(gordo, delay=0)
         for cadoizo in self.cadoizos:
             destroy(cadoizo, delay=0)
 
-        self.dino = Animation("assets/shad", x=-5)
+        self.shadow = Animation("assets/shad", x=-5)
         self.head_collider = Entity(
             model="sphere",
             collider="sphere",
-            parent=self.dino,
-            scale=(0.9, 0.9, 0.9),  # Taille pour la tête
+            parent=self.shadow,
+            scale=(0.9, 0.9, 0.9),
             position=(0, 0, 0),
-            enabled=True,  # Actif par défaut
+            enabled=True,
+            visible = False
         )
         self.ground1 = Entity(
             model="quad", texture="assets/ground", scale=(50, 0.25, 1), z=1, y=-0.3
@@ -73,33 +74,37 @@ class ShadowGame:
             model="sphere",
             collider="sphere",
             parent=self.gordo1,
-            scale=(0.7, 0.7, 0.7),
+            scale=(0.6, 0.6, 0.6),
             position=(0, 0, 0),
             enabled=True,
+            visible = False
         )
         self.gordocollider2 = Entity(
             model="sphere",
             collider="sphere",
             parent=self.gordo2,
-            scale=(0.7, 0.7, 0.7),
+            scale=(0.6, 0.6, 0.6),
             position=(0, 0, 0),
             enabled=True,
+            visible = False
         )
         self.gordocollider3 = Entity(
             model="sphere",
             collider="sphere",
             parent=self.gordo3,
-            scale=(0.7, 0.7, 0.7),
+            scale=(0.6, 0.6, 0.6),
             position=(0, 0, 0),
             enabled=True,
+            visible = False
         )
         self.gordocollider4 = Entity(
             model="sphere",
             collider="sphere",
             parent=self.gordo4,
-            scale=(0.7, 0.7, 0.7),
+            scale=(0.6, 0.6, 0.6),
             position=(0, 0, 0),
             enabled=True,
+            visible = False
         )
         self.label = Text(text=f"Points: {0}", color=color.black, position=(-0.5, 0.4))
         self.points = 0
@@ -112,10 +117,10 @@ class ShadowGame:
             if self.ground.x < -35:
                 self.ground.x += 100
         if self.jumping:
-            self.dino.y += self.velocity * time.dt
+            self.shadow.y += self.velocity * time.dt
             self.velocity += self.gravity * time.dt
-            if self.dino.y <= 0:
-                self.dino.y = 0
+            if self.shadow.y <= 0:
+                self.shadow.y = 0
                 self.jumping = False
         for gordo in self.gordos:
             gordo.x -= 6 * time.dt
@@ -126,34 +131,31 @@ class ShadowGame:
             if cadoizo.x < -10:
                 cadoizo.x = random.randint(20, 30)
         if self.head_collider.intersects().hit:
-            self.dino.texture = "assets/ohno"
+            self.shadow.texture = "assets/ohno"
             self.setup_game()
             self.points = 0
+        
+        with open("action.txt","r",encoding="utf-8") as file:
+            character = file.read()
+            print(character,"#########################################################################################################")
+            match character:
+                case "space" | "j" | "up" :
+                    if not self.jumping:
+                        self.jumping = True
+                        self.velocity = self.jump_speed
+                case "down" | "f":
+                    if self.jumping:
+                        self.velocity -= 13
+                    elif self.shadow.y == 0:
+                        self.shadow.y = -0.1
+                case "q" | "escape":
+                    quit()
+                case _:
+                        self.shadow.y = 0
 
     def input(self, key):
-        # if key in ("space", "j","up"):
-        # if dino.y < 0.01:
-        # sound.play()
-        # dino.animate_y(2, duration=0.4, curve=curve.out_sine)
-        # dino.animate_y(0, duration=0.4, delay=0.4, curve=curve.in_sine)
-
         print(key)
-        if key.split(" ")[0] in ("space", "j", "up"):
-            # if dino.y < 0.01:
-            if not self.jumping:
-                self.jumping = True
-                self.velocity = self.jump_speed
-        elif key.split(" ")[0] in ("down"):
-            if self.jumping:
-                self.velocity -= 13
-                # self.dino.y -= 0.1
-            elif self.dino.y == 0 and key != "down arrow up":
-                self.crouching = True
-                self.dino.y = -0.1
-            elif key == "down arrow up":
-                self.dino.y = 0
-        else:
-            quit()
+        
 
     def view(self):
         closest = min(self.gordos + self.cadoizos, key=lambda x: x.x)
@@ -165,10 +167,14 @@ class ShadowGame:
 
 if __name__ == "__main__":
     Shadgame = ShadowGame()
-    window.fullscreen = True
+    window.fullscreen = False
+    window.borderless = False
+    window.size = (1900, 500)
+    window.position=(0,0)
     window.color = color.white
     camera.orthographic = True
-    camera.fov = 10
+    camera.fov = 5
+    camera.position = (0,2.1,-5)
     update = Shadgame.update
     input = Shadgame.input
     Shadgame.app.run()
