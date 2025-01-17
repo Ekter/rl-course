@@ -162,7 +162,7 @@ class ShadowGame:
         x = closest.x
         y_up = closest.y
         y_down = closest.y + closest.scale_y
-        return x, y_up, y_down
+        return x, y_up, y_down, self.points
 
 
 if __name__ == "__main__":
