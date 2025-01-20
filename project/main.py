@@ -151,7 +151,7 @@ def train(epochs, models=10):
             scores.append((score, model))
             torch.save(model, f"models/model{time.time()}_{score}_{i}_{epoch}.pt")
 
-        scores.sort(key=lambda x: x[0])
+        scores.sort(key=lambda x: x[0], reverse=True)
 
         scores = scores[0:int(len(scores) / 2)]
         new_models = []
