@@ -39,6 +39,7 @@ class ShadowGame:
             destroy(cadoizo, delay=0)
 
         self.shadow = Animation("assets/shad", x=-5)
+
         self.head_collider = Entity(
             model="sphere",
             collider="sphere",
@@ -48,6 +49,9 @@ class ShadowGame:
             enabled=True,
             visible = False
         )
+
+        self.placeholder = Entity(x=100,y=0, enabled=False, scale=(1, 1, 1), visible=False)
+
         self.ground1 = Entity(
             model="quad", texture="assets/ground", scale=(50, 0.25, 1), z=1, y=-0.3
         )
@@ -203,13 +207,17 @@ class ShadowGame:
 
 
     def view(self):
-        try :
-            closest = min(filter(lambda x: x > self.shadow.x,self.gordos + self.cadoizos), key=lambda x: x.x)
-        except ValueError: return 100, 0, 0 , self.points, self.end
-        x = closest.x
-        y_up = closest.y
-        y_down = closest.y + closest.scale_y
-        return x, y_up, y_down, self.points, self.end, self.shadow.y
+        ordered = sorted(filter(lambda obj: obj.x > self.shadow.x-0.3,self.gordos + self.cadoizos), key=lambda x: x.x)
+        try:
+            closest = ordered[0]
+        except IndexError:
+            closest=self.placeholder
+        try:
+            second = ordered[1]
+        except IndexError:
+            second=self.placeholder
+            return 100, 0, 0, 100, 0, 0, self.points, self.end
+        return closest.x, closest.y, closest.y + closest.scale_y, second.x, second.y, second.y + second.scale_y, self.shadow.y, self.points, self.end
 
 
 if __name__ == "__main__":
