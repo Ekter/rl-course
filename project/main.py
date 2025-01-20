@@ -33,7 +33,7 @@ class NeuralNetwork(nn.Module):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(3, 3, ),
+            nn.Linear(4, 3, ),
             # nn.ReLU(),
             # nn.Linear(3, 3),
             nn.Softmax(),
@@ -54,29 +54,29 @@ class NeuralNetwork(nn.Module):
         return logits
 
 def launch_game(model, i):
-    if  os.path.exists(f"data/action{i}.txt" == False):
+    if  os.path.exists(f"data/action{i}.txt" == True):
         with open(f"data/action{i}.txt","w",encoding="utf-8") as file:
             file.write("f")
-    if os.path.exists(f"data/discore{i}.txt" == False):
+    if os.path.exists(f"data/discore{i}.txt" == True):
         with open(f"data/discore{i}.txt", "w", encoding="utf-8") as file :
             file.write("1, 1, 1, 1, 1, 1")
     subprocess.Popen(["python","shadowgame.py", str(i)])
     while True:
-        time.sleep(1/30)
+        # time.sleep(1/30)
         with open(f"data/discore{i}.txt","r",encoding="utf-8") as file:
             reading = file.read()
-        # print(reading)
+        print(reading)
         reading = reading.replace("(","").replace(")","")
         data = reading.split(", ")
-        while len(data) < 5 : 
+        while len(data) < 6 : 
             with open(f"data/discore{i}.txt","r",encoding="utf-8") as file:
                 reading = file.read()
             reading = reading.replace("(","").replace(")","")
             data = reading.split(", ")
-            # print("len pb ===========================================")
+            print("len pb ===========================================")
         if data[4] == "True":
             return int(data[3])
-        model_input = model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2])),dtype=torch.float).to(device))
+        model_input = model.forward(torch.tensor((float(data[0]),float(data[1]),float(data[2]),float(data[5])),dtype=torch.float).to(device))
         with open(f"data/action{i}.txt","w", encoding="utf-8") as file :
             match torch.argmax(model_input) :
                 case 0 :

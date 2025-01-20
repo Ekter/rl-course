@@ -24,7 +24,7 @@ class ShadowGame:
         else :
             self.filescore = f"data/discore.txt"
             self.fileaction = f"data/action.txt"
-            # print("NO I ############################################################")
+            print("NO I ############################################################")
 
         self.setup_game()
 
@@ -57,7 +57,7 @@ class ShadowGame:
         self.cadoizo = Entity(
             model="quad",
             texture="assets/cadoizo2",
-            x=200,
+            x=random.randint(50, 70),
             y=0.5,
             collider="sphere",
             scale=(0.6, 0.6, 0),
@@ -65,7 +65,7 @@ class ShadowGame:
         self.cadoizo2 = Entity(
             model="quad",
             texture="assets/cadoizo2",
-            x=100,
+            x=random.randint(40, 90),
             y=1.1,
             collider="sphere",
             scale=(0.6, 0.6, 0),
@@ -74,10 +74,10 @@ class ShadowGame:
         self.cadoizo2.sped = 8
         self.cadoizos = [self.cadoizo, self.cadoizo2]
 
-        self.gordo1 = Animation(name="assets/gordo", x=10, y=0.3)
-        self.gordo2 = Animation(name="assets/gordo", x=18, y=0.3)
-        self.gordo3 = Animation(name="assets/gordo", x=26, y=0.3)
-        self.gordo4 = Animation(name="assets/gordo", x=37, y=0.3)
+        self.gordo1 = Animation(name="assets/gordo", x=random.randint(10, 20), y=0.3)
+        self.gordo2 = Animation(name="assets/gordo", x=random.randint(20, 30), y=0.3)
+        self.gordo3 = Animation(name="assets/gordo", x=random.randint(30, 40), y=0.3)
+        self.gordo4 = Animation(name="assets/gordo", x=random.randint(40, 50), y=0.3)
         self.gordos = [self.gordo1, self.gordo2, self.gordo3, self.gordo4]
 
         self.gordocollider1 = Entity(
@@ -155,7 +155,7 @@ class ShadowGame:
         
         with open(self.fileaction,"r",encoding="utf-8") as file:
             character = file.read()
-        # print(character,"###################################################################")
+        print(character,"###################################################################")
         match character:
             case "space" | "j" | "up" :
                 if not self.jumping:
@@ -164,6 +164,7 @@ class ShadowGame:
             case "down" | "f":
                 if self.jumping:
                     self.velocity -= 13
+
                 elif self.shadow.y == 0:
                     self.shadow.y = -0.1
             case "q" | "escape":
@@ -204,12 +205,14 @@ class ShadowGame:
 
     def view(self):
         try :
-            closest = min(filter(lambda x: x > self.shadow.x,self.gordos + self.cadoizos), key=lambda x: x.x)
-        except ValueError: return 100, 0, 0 , self.points, self.end
+            closest = min(filter(lambda obj: obj.x > self.shadow.x - 0.5,self.gordos + self.cadoizos), key=lambda x: x.x)
+        except ValueError: 
+            print("Value error +++++++++++++++++++++++++++++++++") 
+            return 100, 0, 0 , self.points, self.end, 0
         x = closest.x
         y_up = closest.y
         y_down = closest.y + closest.scale_y
-        return x, y_up, y_down, self.points, self.end
+        return x, y_up, y_down, self.points, self.end, self.shadow.y
 
 
 if __name__ == "__main__":
