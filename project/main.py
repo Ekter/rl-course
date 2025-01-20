@@ -4,6 +4,7 @@ import torch
 from torch import nn
 from tqdm import tqdm
 import subprocess
+import random
 
 device = (
     "cuda"
@@ -14,6 +15,15 @@ device = (
 )
 print(f"Using {device} device")
 print("\n\n\n\n\n\n\nfeur")
+
+
+def launch_game(model):
+    with open("action.txt","w",encoding="utf-8") as file:
+        file.write("f")
+    subprocess.Popen(["python","shadowgame.py"])
+    print("mpolujyhtfredzs")
+    with open("action.txt","w",encoding="utf-8") as file:
+        file.write("f" if random.random() < 0.5 else "j")
 
 
 class NeuralNetwork(nn.Module):
@@ -27,6 +37,7 @@ class NeuralNetwork(nn.Module):
             nn.Softmax(),
         )
 
+    @staticmethod
     def random_weights(self, base = None, std = 1):
         if base is None:
             base = self.linear_relu_stack[0]
@@ -54,31 +65,29 @@ model.random_weights(model2.linear_relu_stack[0], 0.1)
 
 print(model2.forward(torch.rand(1, 4).to(device)))
 
-models = [NeuralNetwork().to(device) for _ in range(10)]
+def train(epochs):
+    models = [NeuralNetwork().to(device) for _ in range(10)]
 
-for model in models:
-    model.random_weights()
-    model.to(device)
+    for model in models:
+        model.random_weights()
+        model.to(device)
 
-scores = []
-for model in models:# parallelise this later
-    score = launch_game(model)
-    print(score)
-    scores.append((score,model))
+    for epoch in tqdm(range(epochs)):
 
-scores.sort(key=lambda x: x[0])
+        scores = []
+        for model in models:# parallelise this later
+            score = launch_game(model)
+            print(score)
+            scores.append((score,model))
 
-new_models = []
+        scores.sort(key=lambda x: x[0])
 
-for score, model in scores:# improve model
-    pass
+        new_models = []
 
-def launch_game():
-    with open("action.txt","w",encoding="utf-8") as file:
-        file.write("f")
-    subprocess.Popen(["python","shadowgame.py"])
-    print("mpolujyhtfredzs")
+        for score, model in scores:# improve model
+            new_models.append(NeuralNetwork.)
+
 
 
 if __name__ == "__main__":
-    launch_game()
+    train()

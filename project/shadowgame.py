@@ -136,24 +136,25 @@ class ShadowGame:
             self.shadow.texture = "assets/ohno"
             self.setup_game()
             self.points = 0
-        
+
         with open("action.txt","r",encoding="utf-8") as file:
             character = file.read()
-            print(character,"#########################################################################################################")
-            match character:
-                case "space" | "j" | "up" :
-                    if not self.jumping:
-                        self.jumping = True
-                        self.velocity = self.jump_speed
-                case "down" | "f":
-                    if self.jumping:
-                        self.velocity -= 13
-                    elif self.shadow.y == 0:
-                        self.shadow.y = -0.1
-                case "q" | "escape":
-                    quit()
-                case _:
-                        self.shadow.y = 0
+        print(character)
+        match character:
+            case "space" | "j" | "up" :
+                if not self.jumping:
+                    self.jumping = True
+                    self.velocity = self.jump_speed
+            case "down" | "f":
+                if self.jumping:
+                    self.velocity -= 13
+                elif self.shadow.y == 0:
+                    self.shadow.y = -0.1
+            case "q" | "escape":
+                quit()
+            case _:
+                if self.shadow.y < 0:
+                    self.shadow.y = 0
 
     def input(self, key):
         print(key)
