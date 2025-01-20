@@ -57,12 +57,25 @@ def launch_game(model, i):
     with open(f"discore{i}.txt", "w", encoding="utf-8") as file :
         file.write("1, 1, 1, 1")
     subprocess.Popen(["python","shadowgame.py", str(i)])
-    with open(f"discore{i}.txt","r",encoding="utf-8") as file:
-        reading = file.read()
-    print(reading)
-    reading = reading.replace("(","").replace(")","")
-    data = reading.split(", ")
-    print(model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2])),dtype=torch.float).to(device)))
+    while True:
+        with open(f"discore{i}.txt","r",encoding="utf-8") as file:
+            reading = file.read()
+        print(reading)
+        reading = reading.replace("(","").replace(")","")
+        data = reading.split(", ")
+        if data[4] == "True":
+            return data[3]
+        model_input = model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2])),dtype=torch.float).to(device))
+        with open(f"action{i}","w", encoding="utf-8") as file :
+            match torch.argmax(model_input) :
+                case 0 :
+                     file.write("j")
+                case 1 :
+                    file.write("f")
+                case 2 : 
+                    file.write("r")
+        
+           
 
 
 # model = NeuralNetwork().to(device)
