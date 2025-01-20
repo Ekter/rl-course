@@ -19,11 +19,11 @@ class ShadowGame:
         self.end = False
         if len(sys.argv) > 1:
             i = sys.argv[1]
-            self.filescore = f"discore{i}.txt"
-            self.fileaction = f"action{i}.txt"
+            self.filescore = f"data/discore{i}.txt"
+            self.fileaction = f"data/action{i}.txt"
         else :
-            self.filescore = f"discore.txt"
-            self.fileaction = f"action.txt"
+            self.filescore = f"data/discore.txt"
+            self.fileaction = f"data/action.txt"
             print("NO I ############################################################")
 
         self.setup_game()

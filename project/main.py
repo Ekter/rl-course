@@ -54,22 +54,28 @@ class NeuralNetwork(nn.Module):
         return logits
 
 def launch_game(model, i):
-    with open(f"action{i}.txt","w",encoding="utf-8") as file:
+    with open(f"data/action{i}.txt","w",encoding="utf-8") as file:
         file.write("f")
-    with open(f"discore{i}.txt", "w", encoding="utf-8") as file :
+    with open(f"data/discore{i}.txt", "w", encoding="utf-8") as file :
         file.write("1, 1, 1, 1, 1, 1")
     subprocess.Popen(["python","shadowgame.py", str(i)])
     while True:
         time.sleep(1/30)
-        with open(f"discore{i}.txt","r",encoding="utf-8") as file:
+        with open(f"data/discore{i}.txt","r",encoding="utf-8") as file:
             reading = file.read()
         print(reading)
         reading = reading.replace("(","").replace(")","")
         data = reading.split(", ")
+        if len(data) < 5 : 
+            with open(f"data/discore{i}.txt","r",encoding="utf-8") as file:
+                reading = file.read()
+            reading = reading.replace("(","").replace(")","")
+            data = reading.split(", ")
+            print("len pb ===========================================")
         if data[4] == "True":
             return data[3]
         model_input = model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2])),dtype=torch.float).to(device))
-        with open(f"action{i}","w", encoding="utf-8") as file :
+        with open(f"data/action{i}.txt","w", encoding="utf-8") as file :
             match torch.argmax(model_input) :
                 case 0 :
                     file.write("j")
@@ -112,7 +118,7 @@ def train(epochs):
         new_models = []
 
         for score, model in scores:# improve model
-            new_models.append(model.random_weights(model, scores[0][1], 0.1))
+            new_models.append(model.random_weights(model, scores[0][1]))
 
 
 
