@@ -1,15 +1,11 @@
-# from shadowgame import *
-# from ursina import *
-import os
-import subprocess
-
-# import random
-import threading
-import time
-
 import torch
 from torch import nn
 from tqdm import tqdm
+import subprocess
+# import random
+import threading
+import time
+import os
 
 device = (
     "cuda"
@@ -18,6 +14,15 @@ device = (
 )
 print(f"Using {device} device")
 print("\n\n\n\n\n\n\nfeur")
+
+
+# def launch_game(model):
+#     with open("action.txt","w",encoding="utf-8") as file:
+#         file.write("f")
+#     subprocess.Popen(["python","shadowgame.py"])
+#     print("mpolujyhtfredzs")
+#     with open("action.txt","w",encoding="utf-8") as file:
+#         file.write("f" if random.random() < 0.5 else "j")
 
 
 class NeuralNetwork(nn.Module):
@@ -40,8 +45,7 @@ class NeuralNetwork(nn.Module):
         for layer in base:
             if isinstance(layer, nn.Linear):
                 layer.weight.data = (
-                    layer.weight.data.clone()
-                    + torch.randn_like(layer.weight.data) * std
+                    layer.weight.data.clone() + torch.randn_like(layer.weight.data) * std
                 )
                 layer.bias.data = (
                     layer.bias.data.clone() + torch.randn_like(layer.bias.data) * std
@@ -94,58 +98,13 @@ def launch_game(model, i):
                     file.write("r")
 
 
-class ThreadWithReturnValue(threading.Thread):
-    def __init__(
-        self, group=None, target=None, name=None, args=(), kwargs=None, Verbose=None
-    ):
-        threading.Thread.__init__(self, group, target, name, args, kwargs)
-        self._return = None
+def play(model, times):
+    model = torch.load(model).to(device)
 
-    def run(self):
-        if self._target is not None:
-            self._return = self._target(*self._args, **self._kwargs)
-
-    def join(self, *args):
-        threading.Thread.join(self, *args)
-        return self._return
-
-
-def train(epochs, models=10):
-    models = [NeuralNetwork().to(device) for _ in range(models)]
-
-    for model in models:
-        model.random_weights()
-        model.to(device)
-
-    for epoch in tqdm(range(epochs)):
-
-        scores = []
-        threads = []
-        for i, model in enumerate(
-            models
-        ):  # switch comments on threads[i] for parallel training
-            threads.append(ThreadWithReturnValue(target=launch_game, args=(model, i)))
-            # threads[i].start()
-        for i, model in enumerate(models):
-            score = launch_game(model, i)
-            # score = threads[i].join()
-            print(score)
-            scores.append((score, model))
-            torch.save(model, f"models/model{time.time()}_{score}_{i}_{epoch}.pt")
-
-        scores.sort(key=lambda x: x[0], reverse=True)
-
-        scores = scores[0 : int(len(scores) / 2)]
-        new_models = []
-
-        for score, model in scores:  # improve model
-            model.random_weights(model.linear_relu_stack, 1 / score)
-            new_models.append(model)
-            model.random_weights(model.linear_relu_stack, 1 / score)
-            new_models.append(model)
-
-        models = new_models.copy()
+    for _ in tqdm(range(times)):
+        score = launch_game(model, 0)
+        print(score)
 
 
 if __name__ == "__main__":
-    train(10, 10)
+    play("models/model1737406801.8995628_3837_3_9.pt", times=2)
