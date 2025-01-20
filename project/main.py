@@ -17,13 +17,13 @@ print(f"Using {device} device")
 print("\n\n\n\n\n\n\nfeur")
 
 
-def launch_game(model):
-    with open("action.txt","w",encoding="utf-8") as file:
-        file.write("f")
-    subprocess.Popen(["python","shadowgame.py"])
-    print("mpolujyhtfredzs")
-    with open("action.txt","w",encoding="utf-8") as file:
-        file.write("f" if random.random() < 0.5 else "j")
+# def launch_game(model):
+#     with open("action.txt","w",encoding="utf-8") as file:
+#         file.write("f")
+#     subprocess.Popen(["python","shadowgame.py"])
+#     print("mpolujyhtfredzs")
+#     with open("action.txt","w",encoding="utf-8") as file:
+#         file.write("f" if random.random() < 0.5 else "j")
 
 
 class NeuralNetwork(nn.Module):
@@ -55,7 +55,7 @@ def launch_game(model, i):
     with open(f"action{i}.txt","w",encoding="utf-8") as file:
         file.write("f")
     with open(f"discore{i}.txt", "w", encoding="utf-8") as file :
-        file.write("1, 1, 1, 1")
+        file.write("1, 1, 1, 1, 1")
     subprocess.Popen(["python","shadowgame.py", str(i)])
     while True:
         with open(f"discore{i}.txt","r",encoding="utf-8") as file:
@@ -101,7 +101,7 @@ def train(epochs):
 
         scores = []
         for model in models:# parallelise this later
-            score = launch_game(model, i)
+            score = int(launch_game(model, i))
             print(score)
             scores.append((score,model))
 

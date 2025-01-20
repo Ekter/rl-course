@@ -202,7 +202,9 @@ class ShadowGame:
 
 
     def view(self):
-        closest = min(filter(lambda x: x > self.shadow.x,self.gordos + self.cadoizos), key=lambda x: x.x)
+        try :
+            closest = min(filter(lambda x: x > self.shadow.x,self.gordos + self.cadoizos), key=lambda x: x.x)
+        except ValueError: return 100, 0, 0 , self.points, self.end
         x = closest.x
         y_up = closest.y
         y_down = closest.y + closest.scale_y
