@@ -149,7 +149,7 @@ class ShadowGame:
             self.end = True
         with open(self.filescore,"w",encoding="utf-8") as file:
             file.write(str(self.view()))
-        time.sleep(1/30)
+        # time.sleep(1/30)
         if self.end:
             sys.exit(0)
         
