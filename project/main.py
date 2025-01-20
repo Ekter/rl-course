@@ -33,7 +33,7 @@ class NeuralNetwork(nn.Module):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(3, 3, ),
+            nn.Linear(4, 3, ),
             # nn.ReLU(),
             # nn.Linear(3, 3),
             nn.Softmax(),
@@ -68,7 +68,7 @@ def launch_game(model, i):
         # print(reading)
         reading = reading.replace("(","").replace(")","")
         data = reading.split(", ")
-        while len(data) < 5 : 
+        while len(data) < 6 : 
             with open(f"data/discore{i}.txt","r",encoding="utf-8") as file:
                 reading = file.read()
             reading = reading.replace("(","").replace(")","")
@@ -76,7 +76,7 @@ def launch_game(model, i):
             # print("len pb ===========================================")
         if data[4] == "True":
             return int(data[3])
-        model_input = model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2])),dtype=torch.float).to(device))
+        model_input = model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2]),int(data[5])),dtype=torch.float).to(device))
         with open(f"data/action{i}.txt","w", encoding="utf-8") as file :
             match torch.argmax(model_input) :
                 case 0 :
@@ -128,10 +128,10 @@ def train(epochs):
         threads = []
         for i, model in enumerate(models):# parallelise this later
             threads.append(ThreadWithReturnValue(target=launch_game, args=(model, i)))
-            threads[i].start()
+            # threads[i].start()
         for i, model in enumerate(models):
-            # score = launch_game(model, i)
-            score = threads[i].join()
+            score = launch_game(model, i)
+            # score = threads[i].join()
             print(score)
             scores.append((score,model))
 
