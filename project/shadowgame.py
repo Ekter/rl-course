@@ -18,12 +18,13 @@ class ShadowGame:
         self.jumping = True
         self.end = False
         if len(sys.argv) > 1:
-            i = sys.argv[1]
-            self.filescore = f"data/discore{i}.txt"
-            self.fileaction = f"data/action{i}.txt"
+            self.i = sys.argv[1]
+            self.filescore = f"data/discore{self.i}.txt"
+            self.fileaction = f"data/action{self.i}.txt"
         else :
             self.filescore = f"data/discore.txt"
             self.fileaction = f"data/action.txt"
+            self.i=None
             # print("NO I ############################################################")
 
         self.setup_game()
@@ -121,13 +122,13 @@ class ShadowGame:
             visible = False
         )
 
-        self.label = Text(text=f"Points: {0}", color=color.black, position=(-0.5, 0.4))
+        self.label = Text(text=f"Points: {0}", color=color.black, position=(-0.5, 0.4), scale=(3,3,3))
         self.points = 0
 
 
     def update(self):
         self.points += 1
-        self.label.text = f"Points: {self.points}"
+        self.label.text = f"Points: {self.points}, run={self.i}"
         for self.ground in self.pair:
             self.ground.x -= 6 * time.dt
             if self.ground.x < -35:
