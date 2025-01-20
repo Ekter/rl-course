@@ -22,8 +22,8 @@ class ShadowGame:
             self.filescore = f"data/discore{self.i}.txt"
             self.fileaction = f"data/action{self.i}.txt"
         else :
-            self.filescore = f"data/discore.txt"
-            self.fileaction = f"data/action.txt"
+            self.filescore = "data/discore.txt"
+            self.fileaction = "data/action.txt"
             self.i=None
             # print("NO I ############################################################")
 

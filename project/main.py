@@ -1,12 +1,13 @@
-from shadowgame import *
-from ursina import *
+# from shadowgame import *
+# from ursina import *
 import torch
 from torch import nn
 from tqdm import tqdm
 import subprocess
-import random
+# import random
 import threading
 import time
+import os
 
 device = (
     "cuda"
@@ -115,7 +116,7 @@ def launch_game(model, i):
 class ThreadWithReturnValue(threading.Thread):
 
     def __init__(
-        self, group=None, target=None, name=None, args=(), kwargs={}, Verbose=None
+        self, group=None, target=None, name=None, args=(), kwargs=None, Verbose=None
     ):
         threading.Thread.__init__(self, group, target, name, args, kwargs)
         self._return = None
@@ -150,11 +151,14 @@ def train(epochs, models=10):
             scores.append((score, model))
             torch.save(model, f"models/model{time.time()}_{score}_{i}_{epoch}.pt")
 
-        # scores.sort(key=lambda x: x[0])
+        scores.sort(key=lambda x: x[0])
 
+        scores = scores[0:int(len(scores) / 2)]
         new_models = []
 
         for score, model in scores:  # improve model
+            model.random_weights(model.linear_relu_stack, 1 / score)
+            new_models.append(model)
             model.random_weights(model.linear_relu_stack, 1 / score)
             new_models.append(model)
 
@@ -164,4 +168,4 @@ def train(epochs, models=10):
 
 
 if __name__ == "__main__":
-    train(10, 5)
+    train(10, 10)
