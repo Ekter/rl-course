@@ -79,10 +79,10 @@ class ShadowGame:
         self.cadoizo2.sped = 8
         self.cadoizos = [self.cadoizo, self.cadoizo2]
 
-        self.gordo1 = Animation(name="assets/gordo", x=10, y=0.3)
-        self.gordo2 = Animation(name="assets/gordo", x=18, y=0.3)
-        self.gordo3 = Animation(name="assets/gordo", x=26, y=0.3)
-        self.gordo4 = Animation(name="assets/gordo", x=37, y=0.3)
+        self.gordo1 = Animation(name="assets/gordo", x=random.randint(10, 20), y=0.3)
+        self.gordo2 = Animation(name="assets/gordo", x=random.randint(20, 30), y=0.3)
+        self.gordo3 = Animation(name="assets/gordo", x=random.randint(30, 40), y=0.3)
+        self.gordo4 = Animation(name="assets/gordo", x=random.randint(40, 50), y=0.3)
         self.gordos = [self.gordo1, self.gordo2, self.gordo3, self.gordo4]
 
         self.gordocollider1 = Entity(
