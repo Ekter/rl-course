@@ -1,5 +1,7 @@
 *.bin
 lab5/data/*
+action*
+discore*
 
 
 # Byte-compiled / optimized / DLL files

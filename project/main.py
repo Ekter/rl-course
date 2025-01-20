@@ -31,13 +31,12 @@ class NeuralNetwork(nn.Module):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(4, 3, ),
+            nn.Linear(3, 3, ),
             # nn.ReLU(),
             # nn.Linear(3, 3),
             nn.Softmax(),
         )
 
-    @staticmethod
     def random_weights(self, base = None, std = 1):
         if base is None:
             base = self.linear_relu_stack[0]
@@ -63,20 +62,20 @@ def launch_game(model, i):
     print(reading)
     reading = reading.replace("(","").replace(")","")
     data = reading.split(", ")
-    print(model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2]),int(data[3])),dtype=torch.float).to(device)))
+    print(model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2])),dtype=torch.float).to(device)))
 
 
-model = NeuralNetwork().to(device)
-model.random_weights()
+# model = NeuralNetwork().to(device)
+# model.random_weights()
 
-print(model)
+# print(model)
 
-print(model.forward(torch.rand(1, 4).to(device)))
+# print(model.forward(torch.rand(1, 4).to(device)))
 
-model2 = NeuralNetwork().to(device)
-model.random_weights(model2.linear_relu_stack[0], 0.1)
+# model2 = NeuralNetwork().to(device)
+# model.random_weights(model2.linear_relu_stack[0], 0.1)
 
-print(model2.forward(torch.rand(1, 4).to(device)))
+# print(model2.forward(torch.rand(1, 4).to(device)))
 
 def train(epochs):
     models = [NeuralNetwork().to(device) for _ in range(10)]
@@ -85,11 +84,11 @@ def train(epochs):
         model.random_weights()
         model.to(device)
 
-    for epoch in tqdm(range(epochs)):
+    for i, epoch in tqdm(enumerate(range(epochs))):
 
         scores = []
         for model in models:# parallelise this later
-            score = launch_game(model)
+            score = launch_game(model, i)
             print(score)
             scores.append((score,model))
 
@@ -98,9 +97,9 @@ def train(epochs):
         new_models = []
 
         for score, model in scores:# improve model
-            new_models.append(NeuralNetwork.)
+            new_models.append(model.random_weights(model, scores[0][1], 0.1))
 
 
 
 if __name__ == "__main__":
-    train()
+    train(5)
