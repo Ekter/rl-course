@@ -5,6 +5,7 @@ from torch import nn
 from tqdm import tqdm
 import subprocess
 import random
+import time
 
 device = (
     "cuda"
@@ -58,6 +59,7 @@ def launch_game(model, i):
         file.write("1, 1, 1, 1, 1")
     subprocess.Popen(["python","shadowgame.py", str(i)])
     while True:
+        time.sleep(1/30)
         with open(f"discore{i}.txt","r",encoding="utf-8") as file:
             reading = file.read()
         print(reading)
