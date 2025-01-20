@@ -64,6 +64,8 @@ def launch_game(model, i):
         print(reading)
         reading = reading.replace("(","").replace(")","")
         data = reading.split(", ")
+        if data[4] == "True":
+            return data[3]
         model_input = model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2])),dtype=torch.float).to(device))
         with open(f"action{i}","w", encoding="utf-8") as file :
             match torch.argmax(model_input) :
@@ -73,6 +75,7 @@ def launch_game(model, i):
                     file.write("f")
                 case 2 : 
                     file.write("r")
+        
            
 
 
