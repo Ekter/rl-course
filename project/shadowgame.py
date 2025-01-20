@@ -1,6 +1,6 @@
 from ursina import *
 import random as random
-
+import sys
 # app = Ursina()
 
 
@@ -12,11 +12,20 @@ class ShadowGame:
         self.label = None
         self.gordos = []
         self.cadoizos = []
-        self.setup_game()
         self.gravity = -9.8
         self.velocity = 0
         self.jump_speed = 6
         self.jumping = True
+        if len(sys.argv) > 1:
+            i = sys.argv[1]
+            self.filescore = f"discore{i}.txt"
+            self.fileaction = f"action{i}.txt"
+        else :
+            self.filescore = f"discore.txt"
+            self.fileaction = f"action.txt"
+            print("NO I ############################################################")
+
+        self.setup_game()
 
     def setup_game(self):
         self.velocity = 0
@@ -114,6 +123,9 @@ class ShadowGame:
     def update(self):
         self.points += 1
         self.label.text = f"Points: {self.points}"
+        
+        with open(self.filescore,"w",encoding="utf-8") as file:
+            file.write(str(self.view()))
         for self.ground in self.pair:
             self.ground.x -= 6 * time.dt
             if self.ground.x < -35:
@@ -136,10 +148,10 @@ class ShadowGame:
             self.shadow.texture = "assets/ohno"
             self.setup_game()
             self.points = 0
-
-        with open("action.txt","r",encoding="utf-8") as file:
+        
+        with open(self.fileaction,"r",encoding="utf-8") as file:
             character = file.read()
-        print(character)
+        print(character,"###################################################################")
         match character:
             case "space" | "j" | "up" :
                 if not self.jumping:
@@ -177,17 +189,17 @@ class ShadowGame:
             if self.jumping:
                 self.velocity -= 13
                 # self.dino.y -= 0.1
-            elif self.dino.y == 0 and key != "down arrow up":
+            elif self.shadow.y == 0 and key != "down arrow up":
                 self.crouching = True
-                self.dino.y = -0.1
+                self.shadow.y = -0.1
             elif key == "down arrow up":
-                self.dino.y = 0
+                self.shadow.y = 0
         else:
             quit()
 
 
     def view(self):
-        closest = min(self.gordos + self.cadoizos, key=lambda x: x.x)
+        closest = min(filter(lambda x: x > self.shadow.x,self.gordos + self.cadoizos), key=lambda x: x.x)
         x = closest.x
         y_up = closest.y
         y_down = closest.y + closest.scale_y

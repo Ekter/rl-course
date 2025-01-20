@@ -48,9 +48,22 @@ class NeuralNetwork(nn.Module):
                 print(layer.weight.data)
 
     def forward(self, x):
-        x = self.flatten(x)
+        # x = self.flatten(x)
         logits = self.linear_relu_stack(x)
         return logits
+
+def launch_game(model, i):
+    with open(f"action{i}.txt","w",encoding="utf-8") as file:
+        file.write("f")
+    with open(f"discore{i}.txt", "w", encoding="utf-8") as file :
+        file.write("1, 1, 1, 1")
+    subprocess.Popen(["python","shadowgame.py", str(i)])
+    with open(f"discore{i}.txt","r",encoding="utf-8") as file:
+        reading = file.read()
+    print(reading)
+    reading = reading.replace("(","").replace(")","")
+    data = reading.split(", ")
+    print(model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2]),int(data[3])),dtype=torch.float).to(device)))
 
 
 model = NeuralNetwork().to(device)
