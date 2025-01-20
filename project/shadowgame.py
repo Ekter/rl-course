@@ -1,6 +1,8 @@
-from ursina import *
 import random as random
 import sys
+
+from ursina import *
+
 # app = Ursina()
 
 
@@ -21,10 +23,10 @@ class ShadowGame:
             self.i = sys.argv[1]
             self.filescore = f"data/discore{self.i}.txt"
             self.fileaction = f"data/action{self.i}.txt"
-        else :
+        else:
             self.filescore = "data/discore.txt"
             self.fileaction = "data/action.txt"
-            self.i=None
+            self.i = None
             # print("NO I ############################################################")
 
         self.setup_game()
@@ -48,10 +50,12 @@ class ShadowGame:
             scale=(0.9, 0.9, 0.9),
             position=(0, 0, 0),
             enabled=True,
-            visible = False
+            visible=False,
         )
 
-        self.placeholder = Entity(x=100,y=0, enabled=False, scale=(1, 1, 1), visible=False)
+        self.placeholder = Entity(
+            x=100, y=0, enabled=False, scale=(1, 1, 1), visible=False
+        )
 
         self.ground1 = Entity(
             model="quad", texture="assets/ground", scale=(50, 0.25, 1), z=1, y=-0.3
@@ -92,7 +96,7 @@ class ShadowGame:
             scale=(0.6, 0.6, 0.6),
             position=(0, 0, 0),
             enabled=True,
-            visible = False
+            visible=False,
         )
         self.gordocollider2 = Entity(
             model="sphere",
@@ -101,7 +105,7 @@ class ShadowGame:
             scale=(0.6, 0.6, 0.6),
             position=(0, 0, 0),
             enabled=True,
-            visible = False
+            visible=False,
         )
         self.gordocollider3 = Entity(
             model="sphere",
@@ -110,7 +114,7 @@ class ShadowGame:
             scale=(0.6, 0.6, 0.6),
             position=(0, 0, 0),
             enabled=True,
-            visible = False
+            visible=False,
         )
         self.gordocollider4 = Entity(
             model="sphere",
@@ -119,12 +123,16 @@ class ShadowGame:
             scale=(0.6, 0.6, 0.6),
             position=(0, 0, 0),
             enabled=True,
-            visible = False
+            visible=False,
         )
 
-        self.label = Text(text=f"Points: {0}", color=color.black, position=(-0.5, 0.4), scale=(3,3,3))
+        self.label = Text(
+            text=f"Points: {0}",
+            color=color.black,
+            position=(-0.5, 0.4),
+            scale=(3, 3, 3),
+        )
         self.points = 0
-
 
     def update(self):
         self.points += 1
@@ -152,17 +160,17 @@ class ShadowGame:
             # self.setup_game()
             # self.points = 0
             self.end = True
-        with open(self.filescore,"w",encoding="utf-8") as file:
+        with open(self.filescore, "w", encoding="utf-8") as file:
             file.write(str(self.view()))
         # time.sleep(1/30)
         if self.end:
             sys.exit(0)
-        
-        with open(self.fileaction,"r",encoding="utf-8") as file:
+
+        with open(self.fileaction, "r", encoding="utf-8") as file:
             character = file.read()
         # print(character,"###################################################################")
         match character:
-            case "space" | "j" | "up" :
+            case "space" | "j" | "up":
                 if not self.jumping:
                     self.jumping = True
                     self.velocity = self.jump_speed
@@ -179,7 +187,6 @@ class ShadowGame:
 
     def input(self, key):
         print(key)
-
 
     def inputv2(self, key):
         # if key in ("space", "j","up"):
@@ -206,19 +213,33 @@ class ShadowGame:
         else:
             quit()
 
-
     def view(self):
-        ordered = sorted(filter(lambda obj: obj.x > self.shadow.x-0.5,self.gordos + self.cadoizos), key=lambda x: x.x)
+        ordered = sorted(
+            filter(
+                lambda obj: obj.x > self.shadow.x - 0.3, self.gordos + self.cadoizos
+            ),
+            key=lambda x: x.x,
+        )
         try:
             closest = ordered[0]
         except IndexError:
-            closest=self.placeholder
+            closest = self.placeholder
         try:
             second = ordered[1]
         except IndexError:
-            second=self.placeholder
+            second = self.placeholder
             return 100, 0, 0, 100, 0, 0, self.points, self.end
-        return closest.x, closest.y, closest.y + closest.scale_y, second.x, second.y, second.y + second.scale_y, self.shadow.y, self.points, self.end
+        return (
+            closest.x,
+            closest.y,
+            closest.y + closest.scale_y,
+            second.x,
+            second.y,
+            second.y + second.scale_y,
+            self.shadow.y,
+            self.points,
+            self.end,
+        )
 
 
 if __name__ == "__main__":
@@ -226,11 +247,11 @@ if __name__ == "__main__":
     window.fullscreen = False
     window.borderless = False
     window.size = (1900, 500)
-    window.position=(0,0)
+    window.position = (0, 0)
     window.color = color.white
     camera.orthographic = True
     camera.fov = 5
-    camera.position = (0,2.1,-5)
+    camera.position = (0, 2.1, -5)
     update = Shadgame.update
     input = Shadgame.input
     Shadgame.app.run()
