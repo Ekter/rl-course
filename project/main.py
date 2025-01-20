@@ -33,25 +33,26 @@ class NeuralNetwork(nn.Module):
         self.linear_relu_stack = nn.Sequential(
             nn.Linear(
                 7,
-                3,
+                4,
             ),
             nn.ReLU(),
             nn.Linear(4, 3),
-            nn.Softmax(),
+            nn.Softmax(dim=0),
         )
 
     def random_weights(self, base=None, std=1):
         if base is None:
-            base = self.linear_relu_stack[0]
-        for layer in self.linear_relu_stack:
+            base = self.linear_relu_stack
+        for layer in base:
             if isinstance(layer, nn.Linear):
                 layer.weight.data = (
-                    base.weight.data.clone() + torch.randn_like(layer.weight.data) * std
+                    layer.weight.data.clone() + torch.randn_like(layer.weight.data) * std
                 )
                 layer.bias.data = (
-                    base.bias.data.clone() + torch.randn_like(layer.bias.data) * std
+                    layer.bias.data.clone() + torch.randn_like(layer.bias.data) * std
                 )
                 print(layer.weight.data)
+                print(layer.bias.data)
 
     def forward(self, x):
         # x = self.flatten(x)
@@ -84,15 +85,7 @@ def launch_game(model, i):
             return int(data[7])
         model_input = model.forward(
             torch.tensor(
-                (
-                    float(data[0]),
-                    float(data[1]),
-                    float(data[2]),
-                    float(data[3]),
-                    float(data[4]),
-                    float(data[5]),
-                    float(data[6]),
-                ),
+                [float(x) for x in data[0:7]],
                 dtype=torch.float,
             ).to(device)
         )
@@ -114,7 +107,7 @@ def launch_game(model, i):
 # print(model.forward(torch.rand(1, 4).to(device)))
 
 # model2 = NeuralNetwork().to(device)
-# model.random_weights(model2.linear_relu_stack[0], 0.1)
+# model.random_weights(model2.linear_relu_stack, 0.1)
 
 # print(model2.forward(torch.rand(1, 4).to(device)))
 
@@ -136,8 +129,8 @@ class ThreadWithReturnValue(threading.Thread):
         return self._return
 
 
-def train(epochs):
-    models = [NeuralNetwork().to(device) for _ in range(10)]
+def train(epochs, models=10):
+    models = [NeuralNetwork().to(device) for _ in range(models)]
 
     for model in models:
         model.random_weights()
@@ -155,16 +148,20 @@ def train(epochs):
             # score = threads[i].join()
             print(score)
             scores.append((score, model))
+            torch.save(model, f"models/model{time.time()}_{score}_{i}_{epoch}.pt")
 
-        scores.sort(key=lambda x: x[0])
+        # scores.sort(key=lambda x: x[0])
 
         new_models = []
 
         for score, model in scores:  # improve model
-            new_models.append(
-                model.random_weights(model.linear_relu_stack[0], 1 / score)
-            )
+            model.random_weights(model.linear_relu_stack, 1 / score)
+            new_models.append(model)
+
+        models = new_models.copy()
+    
+    # for model in models:
 
 
 if __name__ == "__main__":
-    train(5)
+    train(10, 5)
