@@ -5,6 +5,7 @@ from torch import nn
 from tqdm import tqdm
 import subprocess
 import random
+import threading
 import time
 
 device = (
@@ -56,7 +57,7 @@ def launch_game(model, i):
     with open(f"action{i}.txt","w",encoding="utf-8") as file:
         file.write("f")
     with open(f"discore{i}.txt", "w", encoding="utf-8") as file :
-        file.write("1, 1, 1, 1, 1")
+        file.write("1, 1, 1, 1, 1, 1")
     subprocess.Popen(["python","shadowgame.py", str(i)])
     while True:
         time.sleep(1/30)
@@ -71,13 +72,12 @@ def launch_game(model, i):
         with open(f"action{i}","w", encoding="utf-8") as file :
             match torch.argmax(model_input) :
                 case 0 :
-                     file.write("j")
+                    file.write("j")
                 case 1 :
                     file.write("f")
                 case 2 : 
                     file.write("r")
-        
-           
+
 
 
 # model = NeuralNetwork().to(device)
