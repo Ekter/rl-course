@@ -100,6 +100,21 @@ def launch_game(model, i):
 
 # print(model2.forward(torch.rand(1, 4).to(device)))
 
+class ThreadWithReturnValue(threading.Thread):
+    
+    def __init__(self, group=None, target=None, name=None,
+                 args=(), kwargs={}, Verbose=None):
+        threading.Thread.__init__(self, group, target, name, args, kwargs)
+        self._return = None
+
+    def run(self):
+        if self._target is not None:
+            self._return = self._target(*self._args,
+                                                **self._kwargs)
+    def join(self, *args):
+        threading.Thread.join(self, *args)
+        return self._return
+
 def train(epochs):
     models = [NeuralNetwork().to(device) for _ in range(10)]
 
@@ -110,8 +125,13 @@ def train(epochs):
     for epoch in tqdm(range(epochs)):
 
         scores = []
+        threads = []
         for i, model in enumerate(models):# parallelise this later
-            score = launch_game(model, i)
+            threads.append(ThreadWithReturnValue(target=launch_game, args=(model, i)))
+            threads[i].start()
+        for i, model in enumerate(models):
+            # score = launch_game(model, i)
+            score = threads[i].join()
             print(score)
             scores.append((score,model))
 
