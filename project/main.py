@@ -99,11 +99,11 @@ def train(epochs):
         model.random_weights()
         model.to(device)
 
-    for i, epoch in tqdm(enumerate(range(epochs))):
+    for epoch in tqdm(range(epochs)):
 
         scores = []
-        for model in models:# parallelise this later
-            score = int(launch_game(model, i))
+        for i, model in enumerate(models):# parallelise this later
+            score = launch_game(model, i)
             print(score)
             scores.append((score,model))
 
