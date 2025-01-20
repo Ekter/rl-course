@@ -73,7 +73,7 @@ def launch_game(model, i):
             data = reading.split(", ")
             print("len pb ===========================================")
         if data[4] == "True":
-            return data[3]
+            return int(data[3])
         model_input = model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2])),dtype=torch.float).to(device))
         with open(f"data/action{i}.txt","w", encoding="utf-8") as file :
             match torch.argmax(model_input) :
@@ -118,7 +118,7 @@ def train(epochs):
         new_models = []
 
         for score, model in scores:# improve model
-            new_models.append(model.random_weights(model.linear_relu_stack[0], score))
+            new_models.append(model.random_weights(model.linear_relu_stack[0], 1/score))
 
 
 
