@@ -54,24 +54,26 @@ class NeuralNetwork(nn.Module):
         return logits
 
 def launch_game(model, i):
-    with open(f"data/action{i}.txt","w",encoding="utf-8") as file:
-        file.write("f")
-    with open(f"data/discore{i}.txt", "w", encoding="utf-8") as file :
-        file.write("1, 1, 1, 1, 1, 1")
+    if  os.path.exists(f"data/action{i}.txt" == False):
+        with open(f"data/action{i}.txt","w",encoding="utf-8") as file:
+            file.write("f")
+    if os.path.exists(f"data/discore{i}.txt" == False):
+        with open(f"data/discore{i}.txt", "w", encoding="utf-8") as file :
+            file.write("1, 1, 1, 1, 1, 1")
     subprocess.Popen(["python","shadowgame.py", str(i)])
     while True:
         time.sleep(1/30)
         with open(f"data/discore{i}.txt","r",encoding="utf-8") as file:
             reading = file.read()
-        print(reading)
+        # print(reading)
         reading = reading.replace("(","").replace(")","")
         data = reading.split(", ")
-        if len(data) < 5 : 
+        while len(data) < 5 : 
             with open(f"data/discore{i}.txt","r",encoding="utf-8") as file:
                 reading = file.read()
             reading = reading.replace("(","").replace(")","")
             data = reading.split(", ")
-            print("len pb ===========================================")
+            # print("len pb ===========================================")
         if data[4] == "True":
             return int(data[3])
         model_input = model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2])),dtype=torch.float).to(device))

@@ -24,7 +24,7 @@ class ShadowGame:
         else :
             self.filescore = f"data/discore.txt"
             self.fileaction = f"data/action.txt"
-            print("NO I ############################################################")
+            # print("NO I ############################################################")
 
         self.setup_game()
 
@@ -57,7 +57,7 @@ class ShadowGame:
         self.cadoizo = Entity(
             model="quad",
             texture="assets/cadoizo2",
-            x=2,
+            x=200,
             y=0.5,
             collider="sphere",
             scale=(0.6, 0.6, 0),
@@ -65,7 +65,7 @@ class ShadowGame:
         self.cadoizo2 = Entity(
             model="quad",
             texture="assets/cadoizo2",
-            x=10,
+            x=100,
             y=1.1,
             collider="sphere",
             scale=(0.6, 0.6, 0),
@@ -75,9 +75,9 @@ class ShadowGame:
         self.cadoizos = [self.cadoizo, self.cadoizo2]
 
         self.gordo1 = Animation(name="assets/gordo", x=10, y=0.3)
-        self.gordo2 = Animation(name="assets/gordo", x=14, y=0.3)
-        self.gordo3 = Animation(name="assets/gordo", x=20, y=0.3)
-        self.gordo4 = Animation(name="assets/gordo", x=26, y=0.3)
+        self.gordo2 = Animation(name="assets/gordo", x=18, y=0.3)
+        self.gordo3 = Animation(name="assets/gordo", x=26, y=0.3)
+        self.gordo4 = Animation(name="assets/gordo", x=37, y=0.3)
         self.gordos = [self.gordo1, self.gordo2, self.gordo3, self.gordo4]
 
         self.gordocollider1 = Entity(
@@ -155,7 +155,7 @@ class ShadowGame:
         
         with open(self.fileaction,"r",encoding="utf-8") as file:
             character = file.read()
-        print(character,"###################################################################")
+        # print(character,"###################################################################")
         match character:
             case "space" | "j" | "up" :
                 if not self.jumping:
