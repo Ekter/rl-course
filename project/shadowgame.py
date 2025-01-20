@@ -62,7 +62,7 @@ class ShadowGame:
         self.cadoizo = Entity(
             model="quad",
             texture="assets/cadoizo2",
-            x=200,
+            x=random.randint(50, 70),
             y=0.5,
             collider="sphere",
             scale=(0.6, 0.6, 0),
@@ -70,7 +70,7 @@ class ShadowGame:
         self.cadoizo2 = Entity(
             model="quad",
             texture="assets/cadoizo2",
-            x=100,
+            x=random.randint(40, 90),
             y=1.1,
             collider="sphere",
             scale=(0.6, 0.6, 0),
@@ -208,7 +208,7 @@ class ShadowGame:
 
 
     def view(self):
-        ordered = sorted(filter(lambda obj: obj.x > self.shadow.x-0.3,self.gordos + self.cadoizos), key=lambda x: x.x)
+        ordered = sorted(filter(lambda obj: obj.x > self.shadow.x-0.5,self.gordos + self.cadoizos), key=lambda x: x.x)
         try:
             closest = ordered[0]
         except IndexError:
