@@ -31,7 +31,7 @@ class NeuralNetwork(nn.Module):
         super().__init__()
         self.flatten = nn.Flatten()
         self.linear_relu_stack = nn.Sequential(
-            nn.Linear(4, 3, ),
+            nn.Linear(3, 3, ),
             # nn.ReLU(),
             # nn.Linear(3, 3),
             nn.Softmax(),
@@ -58,25 +58,35 @@ def launch_game(model, i):
     with open(f"discore{i}.txt", "w", encoding="utf-8") as file :
         file.write("1, 1, 1, 1")
     subprocess.Popen(["python","shadowgame.py", str(i)])
-    with open(f"discore{i}.txt","r",encoding="utf-8") as file:
-        reading = file.read()
-    print(reading)
-    reading = reading.replace("(","").replace(")","")
-    data = reading.split(", ")
-    print(model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2]),int(data[3])),dtype=torch.float).to(device)))
+    while True:
+        with open(f"discore{i}.txt","r",encoding="utf-8") as file:
+            reading = file.read()
+        print(reading)
+        reading = reading.replace("(","").replace(")","")
+        data = reading.split(", ")
+        model_input = model.forward(torch.tensor((int(data[0]),int(data[1]),int(data[2])),dtype=torch.float).to(device))
+        with open(f"action{i}","w", encoding="utf-8") as file :
+            match torch.argmax(model_input) :
+                case 0 :
+                     file.write("j")
+                case 1 :
+                    file.write("f")
+                case 2 : 
+                    file.write("r")
+           
 
 
-model = NeuralNetwork().to(device)
-model.random_weights()
+# model = NeuralNetwork().to(device)
+# model.random_weights()
 
-print(model)
+# print(model)
 
-print(model.forward(torch.rand(1, 4).to(device)))
+# print(model.forward(torch.rand(1, 4).to(device)))
 
-model2 = NeuralNetwork().to(device)
-model.random_weights(model2.linear_relu_stack[0], 0.1)
+# model2 = NeuralNetwork().to(device)
+# model.random_weights(model2.linear_relu_stack[0], 0.1)
 
-print(model2.forward(torch.rand(1, 4).to(device)))
+# print(model2.forward(torch.rand(1, 4).to(device)))
 
 def train(epochs):
     models = [NeuralNetwork().to(device) for _ in range(10)]
@@ -98,9 +108,9 @@ def train(epochs):
         new_models = []
 
         for score, model in scores:# improve model
-            new_models.append(NeuralNetwork.)
+            new_models.append(NeuralNetwork.random_weights)
 
 
 
 if __name__ == "__main__":
-    train()
+    train(5)
