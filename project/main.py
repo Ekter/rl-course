@@ -118,7 +118,7 @@ def train(epochs):
         new_models = []
 
         for score, model in scores:# improve model
-            new_models.append(model.random_weights(model.linear_relu_stack[0], scores[0][1]))
+            new_models.append(model.random_weights(model.linear_relu_stack[0], score))
 
 
 
